@@ -6,7 +6,7 @@ class Game:
         self.reset()
 
     @property
-    def current_turn(self):
+    def current_piece(self):
         return 'O' if self.turn % 2 else 'X'
 
     @property
@@ -47,7 +47,7 @@ class Game:
         while not self.game_over:
             self.turn += 1
             self.board.display()
-            print(f"Player {self.current_turn}'s turn")
-            self.last_move = self.board.fill_cell(self.get_move(), self.current_turn)
+            print(f"Player {self.current_piece}'s turn")
+            self.last_move = self.board.fill_cell(self.get_move(), self.current_piece)
         self.board.display()
-        print(f'Player {self.current_turn} wins!' if self.has_won() else 'Tie!')
+        print(f'Player {self.current_piece} wins!' if self.has_won() else 'Tie!')
