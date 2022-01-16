@@ -28,7 +28,7 @@ class Board:
             y, x = row + off * rise, col + off * run
         return off
 
-    def is_board_full(self) -> bool:
+    def is_full(self) -> bool:
         for c in range(self.cols):
             if self.is_cell_open(0, c):
                 return False

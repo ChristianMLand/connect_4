@@ -34,10 +34,9 @@ class Game:
 
     def is_game_over(self, row: int, col: int) -> bool:
         win = self.is_winning_move(row, col)
-        tie = self.board.is_board_full()
-        if win or tie:
+        if win or self.board.is_full():
             self.board.display()
-            print(f"Game over: {f'Player {self.current_turn} wins' if win else 'Tie'}!")
+            print(f'Player {self.current_turn} wins!' if win else 'Tie!')
             return True
         return False
 
