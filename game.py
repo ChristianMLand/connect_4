@@ -5,22 +5,33 @@ class Game:
         self.goal = goal
         self.reset()
 
-    def reset(self) -> None:
-        self.board = Board()
-        self.game_over = False
-        self.turn = 0
-
     @property
     def current_turn(self):
-        return 'X' if self.turn % 2 else 'O'
+        return 'O' if self.turn % 2 else 'X'
+
+    @property
+    def game_over(self) -> bool:
+        return self.has_won() or self.board.is_full()
+
+    def reset(self) -> None:
+        self.board = Board()
+        self.last_move = -1,-1
+        self.turn = 0
 
     def get_move(self) -> int:
-        print(f"Player {self.current_turn}'s turn")
-        while not self.board.is_valid_col(move := input(f"Pick move (0-{self.board.cols-1}): ").strip()) :
-            print("Please choose a valid move!")
+        move = ''
+        while not self.is_valid_move(move):
+            move = input(f"Pick move (0-{self.board.cols-1}): ").strip()
         return int(move)
 
-    def is_winning_move(self, row: int, col: int) -> bool:
+    def is_valid_move(self, move: str) -> bool:
+        if move.isnumeric():
+            col = int(move)
+            return self.board.is_cell_in_bounds(0,col) and self.board.is_cell_open(0, col)
+        return False
+
+    def has_won(self) -> bool:
+        row, col = self.last_move
         dirs = [
             self.board.count_in_direction(row, col, 0, 1) + self.board.count_in_direction(row, col, 0, -1) - 1,
             self.board.count_in_direction(row, col, 1, 1) + self.board.count_in_direction(row, col, -1, -1) - 1,
@@ -32,17 +43,11 @@ class Game:
                 return True
         return False
 
-    def is_game_over(self, row: int, col: int) -> bool:
-        win = self.is_winning_move(row, col)
-        if win or self.board.is_full():
-            self.board.display()
-            print(f'Player {self.current_turn} wins!' if win else 'Tie!')
-            return True
-        return False
-
     def play(self) -> None:
         while not self.game_over:
-            self.board.display()
-            row,col = self.board.fill_cell(self.get_move(), self.current_turn)
-            self.game_over = self.is_game_over(row, col)
             self.turn += 1
+            self.board.display()
+            print(f"Player {self.current_turn}'s turn")
+            self.last_move = self.board.fill_cell(self.get_move(), self.current_turn)
+        self.board.display()
+        print(f'Player {self.current_turn} wins!' if self.has_won() else 'Tie!')

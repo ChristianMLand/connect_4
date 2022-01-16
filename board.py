@@ -8,12 +8,6 @@ class Board:
         for row in self.board:
             print(row)
 
-    def is_valid_col(self, col: str) -> bool:
-        if col.isnumeric():
-            col = int(col)
-            return 0 <= col < self.cols and self.is_cell_open(0, col)
-        return False
-
     def is_cell_in_bounds(self, row: int, col: int) -> bool:
         return 0 <= row < self.rows and 0 <= col < self.cols
 
