@@ -20,7 +20,7 @@ class Game:
             print("Please choose a valid move!")
         return int(move)
 
-    def is_win_move(self, row: int, col: int) -> bool:
+    def is_winning_move(self, row: int, col: int) -> bool:
         dirs = [
             self.board.count_in_direction(row, col, 0, 1) + self.board.count_in_direction(row, col, 0, -1) - 1,
             self.board.count_in_direction(row, col, 1, 1) + self.board.count_in_direction(row, col, -1, -1) - 1,
@@ -33,7 +33,7 @@ class Game:
         return False
 
     def is_game_over(self, row: int, col: int) -> bool:
-        win = self.is_win_move(row, col)
+        win = self.is_winning_move(row, col)
         tie = self.board.is_board_full()
         if win or tie:
             self.board.display()
